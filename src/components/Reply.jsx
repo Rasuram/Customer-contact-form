@@ -43,7 +43,7 @@ class Reply extends React.Component {
 
     retrieveStatus = (e) => {
         e.preventDefault();
-        axios.get(` http://localhost:8000/user/details/${this.state.retrieve}`)
+        axios.get(` https://kebh02i127.execute-api.us-east-2.amazonaws.com/dev/user/details/${this.state.retrieve}`)
             .then(res => {
                 this.setState({retrieve: "", ticketStatus: res.data.users[0]});
 
@@ -54,7 +54,12 @@ class Reply extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault();
         const {userName, replyEmail, message, subject} = this.state;
-        axios.post(`http://localhost:8000/save/receipt`, {userName, replyEmail, message, subject})
+        axios.post(`https://kebh02i127.execute-api.us-east-2.amazonaws.com/save/receipt`, {
+            userName,
+            replyEmail,
+            message,
+            subject
+        })
             .then(res => {
                 this.setState({submitted: true, requestId: res.data.ticketId});
                 console.log(res);

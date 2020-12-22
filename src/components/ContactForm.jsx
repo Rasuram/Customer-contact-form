@@ -42,18 +42,23 @@ export class ContactForm extends Component {
         event.preventDefault();
         this.setState({status: 'pending'});
         const {userName, email, message, subject} = this.state;
-        axios.post(`http://localhost:8000/user/sendmail`, {userName, email, message, subject})
+        axios.post(`https://kebh02i127.execute-api.us-east-2.amazonaws.com/user/sendmail`, {
+            userName,
+            email,
+            message,
+            subject
+        })
             .then(res => {
                 this.setState({status: 'mail sent successfully!'});
                 console.log(res);
                 console.log(res.data);
             }).catch(error => {
-            this.setState({status: 'failed to send email'+error});
+            this.setState({status: 'failed to send email' + error});
         });
 
 
         // Reset from after submiting
-         document.getElementById('contact-form').reset();
+        document.getElementById('contact-form').reset();
         this.setState({userName: "", email: "", message: ""});
 
     }
@@ -70,11 +75,12 @@ export class ContactForm extends Component {
             <MuiThemeProvider theme={theme}>
                 <CssBaseline/>
                 <div className={classes.container}>
-                    <Typography variant="h4" align="center" component="h1" gutterBottom>
-                        {'Contact Form'.toUpperCase()}
-                    </Typography>
+
                     <Grid container direction="column" justify="center" alignItems="center">
                         <Grid item>
+                            <Typography variant="h4" align="center" component="h1" gutterBottom>
+                                {'Customer Contact Form'.toUpperCase()}
+                            </Typography>
                             <form
                                 id="contact-form"
                                 className={classes.contactForm}
