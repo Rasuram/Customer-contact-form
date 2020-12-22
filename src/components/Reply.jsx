@@ -62,7 +62,7 @@ class Reply extends React.Component {
             }
         }
 
-        axios.post(`https://kebh02i127.execute-api.us-east-2.amazonaws.com/save/receipt`, {
+        axios.post(`https://kebh02i127.execute-api.us-east-2.amazonaws.com/dev/save/receipt`, {
             userName,
             replyEmail,
             message,

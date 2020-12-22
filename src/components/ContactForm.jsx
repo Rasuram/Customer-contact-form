@@ -49,7 +49,7 @@ export class ContactForm extends Component {
             }
         }
         const {userName, email, message, subject} = this.state;
-        axios.post(`https://kebh02i127.execute-api.us-east-2.amazonaws.com/user/sendmail`, {
+        axios.post(`https://kebh02i127.execute-api.us-east-2.amazonaws.com/dev/user/sendmail`, {
             userName,
             email,
             message,
