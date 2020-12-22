@@ -41,21 +41,19 @@ export class ContactForm extends Component {
     handleSubmit = async event => {
         event.preventDefault();
         this.setState({status: 'pending'});
-
+        let config = {
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+            }
+        }
         const {userName, email, message, subject} = this.state;
         axios.post(`https://kebh02i127.execute-api.us-east-2.amazonaws.com/user/sendmail`, {
             userName,
             email,
             message,
             subject
-        }, {
-            headers:
-                {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'POST',
-                    'Access-Control-Allow-Headers': 'Origin, Content-Type, X-API-Token'
-                }
-        })
+        }, config)
             .then(res => {
                 this.setState({status: 'mail sent successfully!'});
                 console.log(res);
