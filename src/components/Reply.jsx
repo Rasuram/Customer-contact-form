@@ -59,6 +59,9 @@ class Reply extends React.Component {
             replyEmail,
             message,
             subject
+        }, {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
         })
             .then(res => {
                 this.setState({submitted: true, requestId: res.data.ticketId});

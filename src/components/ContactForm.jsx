@@ -41,12 +41,16 @@ export class ContactForm extends Component {
     handleSubmit = async event => {
         event.preventDefault();
         this.setState({status: 'pending'});
+
         const {userName, email, message, subject} = this.state;
         axios.post(`https://kebh02i127.execute-api.us-east-2.amazonaws.com/user/sendmail`, {
             userName,
             email,
             message,
             subject
+        },{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
         })
             .then(res => {
                 this.setState({status: 'mail sent successfully!'});
