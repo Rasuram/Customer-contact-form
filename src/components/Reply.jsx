@@ -55,6 +55,7 @@ class Reply extends React.Component {
         e.preventDefault();
         const {userName, replyEmail, message, subject} = this.state;
         let config = {
+            mode: 'no-cors',
             headers: {
                 "Content-Type": "application/json",
                 'Access-Control-Allow-Origin': '*',

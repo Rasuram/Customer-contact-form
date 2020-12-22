@@ -42,6 +42,7 @@ export class ContactForm extends Component {
         event.preventDefault();
         this.setState({status: 'pending'});
         let config = {
+            mode: 'no-cors',
             headers: {
                 "Content-Type": "application/json",
                 'Access-Control-Allow-Origin': '*',
