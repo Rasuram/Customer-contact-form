@@ -60,8 +60,12 @@ class Reply extends React.Component {
             message,
             subject
         }, {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
+            headers:
+                {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST',
+                    'Access-Control-Allow-Headers': 'Origin, Content-Type, X-API-Token'
+                }
         })
             .then(res => {
                 this.setState({submitted: true, requestId: res.data.ticketId});
