@@ -51,7 +51,8 @@ class Reply extends React.Component {
             }
         }
         e.preventDefault();
-        axios.get(` https://kebh02i127.execute-api.us-east-2.amazonaws.com/dev/user/details/${this.state.retrieve}`,config)
+        //https://kebh02i127.execute-api.us-east-2.amazonaws.com/dev/user/details/${this.state.retrieve}
+        axios.get(` https://kebh02i127.execute-api.us-east-2.amazonaws.com/dev/user/details`,config)
             .then(res => {
                 this.setState({retrieve: "", ticketStatus: res.data.users[0]});
 

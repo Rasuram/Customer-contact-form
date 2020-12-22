@@ -1,58 +1,218 @@
-import React from 'react';
-import {Paper, withStyles, Grid, TextField, Button, FormControlLabel, Checkbox} from '@material-ui/core';
+import React, {useEffect, useRef, useState} from 'react';
+import {makeStyles, withStyles} from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
 
 
-const styles = theme => ({
-    margin: {
-        margin: theme.spacing.unit * 2,
-    },
-    padding: {
-        padding: theme.spacing.unit
+import CardActions from '@material-ui/core/CardActions';
+import TextField from "@material-ui/core/TextField";
+import '../App.css';
+import {createStyles} from "@material-ui/core";
+
+const useStyles = makeStyles((theme) =>
+    createStyles({
+        container: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            width: 400,
+            margin: `${theme.spacing(0)} auto`
+        },
+        loginBtn: {
+            marginTop: theme.spacing(2),
+            flexGrow: 1
+        },
+        header: {
+            textAlign: 'center',
+            background: '#212121',
+            color: '#fff'
+        },
+        card: {
+            marginTop: theme.spacing(10)
+        }
+
+    }),
+);
+const Login = (props) => {
+    const classes = useStyles();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [helperText, setHelperText] = useState('');
+    const [error, setError] = useState(false);
+    const history = useHistory();
+    const {handleClose} = props;
+    const {onSubmit} = props;
+
+    useEffect(() => {
+        if (username.trim() && password.trim()) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [username, password]);
+
+    const handleLogin = (props) => {
+
+        const {loginSuccess} = props;
+        if (username==='test' && password==='test') {
+            // validateUser(props);
+            setError(false);
+            history.push("/");
+            onSubmit();
+            setHelperText('Login Successfully');
+        } else {
+            setError(true);
+            setHelperText('Incorrect username or password')
+        }
+    };
+
+
+    const validateUser = (props) => {
+        const {loginSuccess} = props;
+        //reverse-proxy to supress cors
+        const url = 'http://localhost:3000/login';
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                userName: username,
+                passWord: password
+            }),
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        }).then((response) => {
+            if (response.status === 200) {
+                loginSuccess(true);
+                handleClose()
+            } else {
+                setError(true);
+                setHelperText('Incorrect username or password')
+            }
+        })
     }
-});
+    const handleKeyPress = (e) => {
+        if (e.keyCode === 13 || e.which === 13) {
+            isButtonDisabled || handleLogin();
+        }
+    };
 
-class LoginTab extends React.Component {
-    render() {
-        const {classes} = this.props;
-        return (
-            <Paper className={classes.padding}>
-                <div className={classes.margin}>
-                    <Grid container spacing={8} alignItems="flex-end">
-                        <Grid item>
 
-                        </Grid>
-                        <Grid item md={true} sm={true} xs={true}>
-                            <TextField id="username" label="Username" type="email" fullWidth autoFocus required/>
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={8} alignItems="flex-end">
-                        <Grid item>
+    return (
+        <React.Fragment>
+            <MDBContainer>
+                <MDBRow>
+                    <MDBCol md="6">
+                        <MDBCard>
+                            <MDBCardBody className="mx-4">
+                                <div className="text-center">
+                                    <h3 className="dark-grey-text mb-5">
+                                        <strong>Sign in</strong>
+                                    </h3>
+                                </div>
+                                <CardContent>
+                                    <div>
+                                        <TextField
+                                            error={error}
+                                            fullWidth
+                                            id="username"
+                                            type="email"
+                                            label="Username"
+                                            placeholder="Username"
+                                            margin="normal"
+                                            onChange={(e) => setUsername(e.target.value)}
+                                            onKeyPress={(e) => handleKeyPress(e)}
+                                        />
+                                        <TextField
+                                            error={error}
+                                            fullWidth
+                                            id="password"
+                                            type="password"
+                                            label="Password"
+                                            placeholder="Password"
+                                            margin="normal"
+                                            helperText={helperText}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            onKeyPress={(e) => handleKeyPress(e)}
+                                        />
+                                    </div>
+                                </CardContent>
+                                <CardActions>
+                                    <Button
+                                        variant="contained"
+                                        size="medium"
+                                        color="secondary"
+                                        className={classes.loginBtn}
+                                        onClick={() => handleClose()}>
+                                        cancel
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        size="medium"
+                                        color="primary"
+                                        className={classes.loginBtn}
+                                        onClick={() => handleLogin(props)}
+                                        disabled={isButtonDisabled}>
+                                        Login
+                                    </Button>
 
-                        </Grid>
-                        <Grid item md={true} sm={true} xs={true}>
-                            <TextField id="username" label="Password" type="password" fullWidth required/>
-                        </Grid>
-                    </Grid>
-                    <Grid container alignItems="center" justify="space-between">
-                        <Grid item>
-                            <FormControlLabel control={
-                                <Checkbox
-                                    color="primary"
-                                />
-                            } label="Remember me"/>
-                        </Grid>
-                        <Grid item>
-                            <Button disableFocusRipple disableRipple style={{textTransform: "none"}} variant="text"
-                                    color="primary">Forgot password ?</Button>
-                        </Grid>
-                    </Grid>
-                    <Grid container justify="center" style={{marginTop: '10px'}}>
-                        <Button variant="outlined" color="primary" style={{textTransform: "none"}}>Login</Button>
-                    </Grid>
-                </div>
-            </Paper>
-        );
-    }
+                                </CardActions>
+                                <p className="font-small blue-text d-flex justify-content-end pb-3">
+                                    Forgot
+                                    <a href="#!" className="blue-text ml-1">
+
+                                        Password?
+                                    </a>
+                                </p>
+                                <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2">
+
+                                    or Sign in with:
+                                </p>
+                                <div className="row my-3 d-flex justify-content-center">
+                                    <MDBBtn
+                                        type="button"
+                                        color="white"
+                                        rounded
+                                        className="mr-md-3 z-depth-1a"
+                                    >
+                                        <MDBIcon fab icon="facebook-f" className="blue-text text-center" />
+                                    </MDBBtn>
+                                    <MDBBtn
+                                        type="button"
+                                        color="white"
+                                        rounded
+                                        className="mr-md-3 z-depth-1a"
+                                    >
+                                        <MDBIcon fab icon="twitter" className="blue-text" />
+                                    </MDBBtn>
+                                    <MDBBtn
+                                        type="button"
+                                        color="white"
+                                        rounded
+                                        className="z-depth-1a"
+                                    >
+                                        <MDBIcon fab icon="google-plus-g" className="blue-text" />
+                                    </MDBBtn>
+                                </div>
+                            </MDBCardBody>
+                            <MDBModalFooter className="mx-5 pt-3 mb-1">
+                                <p className="font-small grey-text d-flex justify-content-end">
+                                    Not a member?
+                                    <a href="#!" className="blue-text ml-1">
+
+                                        Sign Up
+                                    </a>
+                                </p>
+                            </MDBModalFooter>
+                        </MDBCard>
+                    </MDBCol>
+                </MDBRow>
+            </MDBContainer>
+        </React.Fragment>
+    );
 }
 
-export default withStyles(styles)(LoginTab);
+export default Login;
