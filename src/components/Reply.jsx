@@ -41,9 +41,17 @@ class Reply extends React.Component {
         );
     };
 
+
     retrieveStatus = (e) => {
+        const config = {
+            mode: 'no-cors',
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+            }
+        }
         e.preventDefault();
-        axios.get(` https://kebh02i127.execute-api.us-east-2.amazonaws.com/dev/user/details/${this.state.retrieve}`)
+        axios.get(` https://kebh02i127.execute-api.us-east-2.amazonaws.com/dev/user/details/${this.state.retrieve}`,config)
             .then(res => {
                 this.setState({retrieve: "", ticketStatus: res.data.users[0]});
 
@@ -51,17 +59,17 @@ class Reply extends React.Component {
             this.setState({status: false});
         });
     }
+
     handleSubmit = (e) => {
         e.preventDefault();
         const {userName, replyEmail, message, subject} = this.state;
-        let config = {
+        const config = {
             mode: 'no-cors',
             headers: {
                 "Content-Type": "application/json",
                 'Access-Control-Allow-Origin': '*',
             }
         }
-
         axios.post(`https://kebh02i127.execute-api.us-east-2.amazonaws.com/dev/save/receipt`, {
             userName,
             replyEmail,
