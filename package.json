@@ -11,6 +11,8 @@
     "react": "latest",
     "react-dom": "latest",
     "react-final-form": "latest",
+    "react-facebook-login": "^3.6.2",
+    "react-google-login": "^3.0.1",
     "react-scripts": "latest"
   },
   "peerDependencies": {

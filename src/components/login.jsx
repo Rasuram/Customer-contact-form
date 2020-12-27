@@ -1,17 +1,18 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
+import config from '../config/secret.json';
+import {MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter} from 'mdbreact';
 
 
 import CardActions from '@material-ui/core/CardActions';
 import TextField from "@material-ui/core/TextField";
 import '../App.css';
 import {createStyles} from "@material-ui/core";
+import FacebookLogin from "react-facebook-login";
+import {GoogleLogin} from "react-google-login";
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -40,6 +41,9 @@ const Login = (props) => {
     const classes = useStyles();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isAuthenticated, setAuthenticated] = useState(false);
+    const [user, setUser] = useState(null);
+    const [token, setToken] = useState('');
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [helperText, setHelperText] = useState('');
     const [error, setError] = useState(false);
@@ -58,7 +62,7 @@ const Login = (props) => {
     const handleLogin = (props) => {
 
         const {loginSuccess} = props;
-        if (username==='test' && password==='test') {
+        if (username === 'test' && password === 'test') {
             // validateUser(props);
             setError(false);
             history.push("/");
@@ -70,6 +74,15 @@ const Login = (props) => {
         }
     };
 
+    const logout = () => {
+        setAuthenticated(false);
+        setToken('');
+        setUser(null);
+    };
+
+    const onFailure = (error) => {
+        alert(error);
+    };
 
     const validateUser = (props) => {
         const {loginSuccess} = props;
@@ -98,6 +111,50 @@ const Login = (props) => {
         if (e.keyCode === 13 || e.which === 13) {
             isButtonDisabled || handleLogin();
         }
+    };
+
+    const facebookResponse = (response) => {
+        history.push("/");
+        onSubmit();
+        const tokenBlob = new Blob([JSON.stringify({access_token: response.accessToken}, null, 2)], {type: 'application/json'});
+        const options = {
+            method: 'POST',
+            body: tokenBlob,
+            mode: 'cors',
+            cache: 'default'
+        };
+        fetch('http://localhost:4000/api/v1/auth/facebook', options).then(r => {
+            const token = r.headers.get('x-auth-token');
+            r.json().then(user => {
+                if (token) {
+                    setAuthenticated(true);
+                    setToken(token);
+                    setUser(user);
+                }
+            });
+        })
+    };
+
+    const googleResponse = (response) => {
+        history.push("/");
+        onSubmit();
+        const tokenBlob = new Blob([JSON.stringify({access_token: response.accessToken}, null, 2)], {type: 'application/json'});
+        const options = {
+            method: 'POST',
+            body: tokenBlob,
+            mode: 'cors',
+            cache: 'default'
+        };
+        fetch('http://localhost:4000/api/v1/auth/google', options).then(r => {
+            const token = r.headers.get('x-auth-token');
+            r.json().then(user => {
+                if (token) {
+                    setAuthenticated(true);
+                    setToken(token);
+                    setUser(user);
+                }
+            });
+        })
     };
 
 
@@ -171,31 +228,40 @@ const Login = (props) => {
 
                                     or Sign in with:
                                 </p>
+
                                 <div className="row my-3 d-flex justify-content-center">
+                                    <FacebookLogin
+                                        appId={config.FACEBOOK_APP_ID}
+                                        autoLoad={false}
+                                        fields="name,email,picture"
+                                        callback={facebookResponse}>
+                                        <MDBBtn
+                                            type="button"
+                                            color="white"
+                                            rounded
+                                            className="mr-md-3 z-depth-1a"
+                                        >
+                                            <MDBIcon fab icon="facebook-f" className="blue-text text-center"/>
+                                        </MDBBtn>
+                                    </FacebookLogin>
+
                                     <MDBBtn
                                         type="button"
                                         color="white"
                                         rounded
                                         className="mr-md-3 z-depth-1a"
                                     >
-                                        <MDBIcon fab icon="facebook-f" className="blue-text text-center" />
+                                        <MDBIcon fab icon="twitter" className="blue-text"/>
                                     </MDBBtn>
-                                    <MDBBtn
-                                        type="button"
-                                        color="white"
-                                        rounded
-                                        className="mr-md-3 z-depth-1a"
+                                    <GoogleLogin
+                                        clientId={config.GOOGLE_CLIENT_ID}
+                                        buttonText="Login"
+                                        onSuccess={googleResponse}
+                                        onFailure={onFailure}
                                     >
-                                        <MDBIcon fab icon="twitter" className="blue-text" />
-                                    </MDBBtn>
-                                    <MDBBtn
-                                        type="button"
-                                        color="white"
-                                        rounded
-                                        className="z-depth-1a"
-                                    >
-                                        <MDBIcon fab icon="google-plus-g" className="blue-text" />
-                                    </MDBBtn>
+                                            <MDBIcon fab icon="google-plus-g" className="blue-text"/>
+                                    </GoogleLogin>
+
                                 </div>
                             </MDBCardBody>
                             <MDBModalFooter className="mx-5 pt-3 mb-1">
