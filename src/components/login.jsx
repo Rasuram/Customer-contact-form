@@ -4,6 +4,7 @@ import {useHistory} from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import config from '../config/secret.json';
+import Amplify, {Auth} from "aws-amplify";
 import {MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter} from 'mdbreact';
 
 
@@ -13,6 +14,7 @@ import '../App.css';
 import {createStyles} from "@material-ui/core";
 import FacebookLogin from "react-facebook-login";
 import {GoogleLogin} from "react-google-login";
+import {CognitoUserPool} from "amazon-cognito-identity-js";
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -59,20 +61,24 @@ const Login = (props) => {
         }
     }, [username, password]);
 
-    const handleLogin = (props) => {
-
-        const {loginSuccess} = props;
-        if (username === 'test' && password === 'test') {
-            // validateUser(props);
+    const handleLogin = async (props) => {
+        // AWS Cognito integration here
+        try {
+            const user = await Auth.signIn(username, password);
+            console.log(user);
             setError(false);
             history.push("/");
             onSubmit();
             setHelperText('Login Successfully');
-        } else {
+        } catch (error) {
+            let err = null;
+            !error.message ? err = {"message": error} : err = error;
             setError(true);
-            setHelperText('Incorrect username or password')
+            setHelperText(error.message)
+            console.log(error);
         }
     };
+
 
     const logout = () => {
         setAuthenticated(false);
@@ -81,7 +87,7 @@ const Login = (props) => {
     };
 
     const onFailure = (error) => {
-        alert(error);
+        // alert(error);
     };
 
     const validateUser = (props) => {
@@ -259,7 +265,7 @@ const Login = (props) => {
                                         onSuccess={googleResponse}
                                         onFailure={onFailure}
                                     >
-                                            <MDBIcon fab icon="google-plus-g" className="blue-text"/>
+                                        <MDBIcon fab icon="google-plus-g" className="blue-text"/>
                                     </GoogleLogin>
 
                                 </div>
@@ -267,8 +273,7 @@ const Login = (props) => {
                             <MDBModalFooter className="mx-5 pt-3 mb-1">
                                 <p className="font-small grey-text d-flex justify-content-end">
                                     Not a member?
-                                    <a href="#!" className="blue-text ml-1">
-
+                                    <a href="/register" className="blue-text ml-1">
                                         Sign Up
                                     </a>
                                 </p>

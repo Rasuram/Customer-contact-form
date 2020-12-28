@@ -1,0 +1,8 @@
+{
+  "cognito": {
+    "REGION": "us-east-2",
+    "USER_POOL_ID": "us-east-2_6RPO1yDhD",
+    "APP_CLIENT_ID": "5br41rmhg7e7k936k4jp7g6uki",
+    "AWS_IDENTITY_POOL_ID": "us-east-2:d506ca5f-b676-453a-b5c9-c6e3554323d9"
+  }
+}

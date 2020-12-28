@@ -3,7 +3,7 @@ import {BrowserRouter, Redirect, Route} from "react-router-dom";
 import ContactForm from './components/ContactForm'
 import Reply from './components/Reply'
 import Login from './components/login'
-
+import Register from './components/Register'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import
     'bootstrap-css-only/css/bootstrap.min.css';
@@ -39,6 +39,7 @@ class App extends Component {
                         </Route>
                         <Route path="/contact" component={ContactForm}/>
                         <Route path="/reply" component={Reply}/>
+                        <Route path="/register" component={Register}/>
                     </div>
                 </BrowserRouter>
             </React.Fragment>
