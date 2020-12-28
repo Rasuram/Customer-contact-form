@@ -4,7 +4,6 @@ import './index.css';
 import Amplify from "aws-amplify";
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import config from './config.json';
 import awsconfig from "./aws-exports";
 
 Amplify.configure(awsconfig);
