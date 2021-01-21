@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {BrowserRouter, Redirect, Route} from "react-router-dom";
-import ContactForm from './components/ContactForm'
-import Reply from './components/Reply'
-import Login from './components/login'
-import Register from './components/Register'
+import ContactForm from './contact/ContactForm'
+import Reply from './reply/Reply'
+import Login from './login/login'
+import Register from './register/Register'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import
     'bootstrap-css-only/css/bootstrap.min.css';

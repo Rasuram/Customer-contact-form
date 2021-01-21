@@ -3,7 +3,7 @@ import {makeStyles, withStyles} from '@material-ui/core/styles';
 import {useHistory} from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
-import config from '../config/secret.json';
+import config from '../../config/secret.json';
 import Amplify, {Auth} from "aws-amplify";
 import {MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter} from 'mdbreact';
 
