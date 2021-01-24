@@ -60,7 +60,7 @@ export class ContactForm extends Component {
                 console.log(res);
                 console.log(res.data);
             }).catch(error => {
-            this.setState({status: 'failed to send email' + error});
+            this.setState({status: 'failed to send email, email not registered: ' + error});
         });
 
 

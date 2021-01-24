@@ -3,7 +3,7 @@ import FormErrors from "../errors/FormErrors";
 import Validate from "../../utility/FormValidation";
 import Amplify, {Auth} from "aws-amplify";
 import '../App.css';
-import awsconfig from "../aws-exports";
+import awsconfig from "../../aws-exports";
 
 Amplify.configure(awsconfig);
 

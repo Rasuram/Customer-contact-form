@@ -5,6 +5,7 @@ Using Material UI, Build a form (name, email, message, submit button). The page 
 On submit, the UI should call API Gateway to trigger a Lambda function. 
 The Lambda function should send an email using SES, and store the message in DynamoDB. 
 
+
 Context Diagram:
 
 ![alt text](./public/design.jpg)
